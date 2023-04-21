@@ -1,0 +1,34 @@
+version: '3.3'
+
+services:
+  postgres:
+    image: postgres:13.3
+    environment:
+      POSTGRES_USER: "gochallenge"
+      POSTGRES_PASSWORD: "gochallenge"
+      POSTGRES_DBNAME: "gochallenge"
+    ports:
+      - "5432:5432"
+    volumes:
+      - data:/var/lib/postgresql/data
+    networks:
+      - network
+
+  pgadmin:
+    image: dpage/pgadmin4
+    environment:
+      PGADMIN_DEFAULT_EMAIL: "admin@admin.com"
+      PGADMIN_DEFAULT_PASSWORD: "root"
+    ports:
+      - "8001:80"
+    depends_on:
+      - postgres
+    networks:
+      - network
+
+volumes:
+  data:
+
+networks:
+  network:
+    driver: bridge
