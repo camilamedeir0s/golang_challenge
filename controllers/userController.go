@@ -56,7 +56,7 @@ func UsersArrayCreate(c *gin.Context) {
 	}
 
 	c.JSON(201, gin.H{
-		"message": "Todos os usuários criados",
+		"Todos os usuários criados": users,
 	})
 }
 
@@ -88,15 +88,6 @@ func GetUser(c *gin.Context){
 func UserUpdate(c *gin.Context){
 	username := c.Param("username")
 
-	//bind body data
-	var body models.User
-	err := c.ShouldBindJSON(&body)
-	if err != nil {
-        c.JSON(400, gin.H{"error": err.Error()})
-        return
-    }
-
-	//find user
 	var user models.User
 	result := initializers.DB.Where("username = ?", username).First(&user)
 	if result.Error != nil {
@@ -105,18 +96,13 @@ func UserUpdate(c *gin.Context){
 		return
 	}
 
-	user.FirstName = body.FirstName
-	user.LastName = body.LastName
-	user.Email = body.Email
-	user.Password = body.Password
-	user.Phone = body.Phone
-	user.UserStatus = body.UserStatus
-
-    if err := initializers.DB.Save(&user).Error; err != nil {
+	err := c.ShouldBindJSON(&user)
+	if err != nil {
         c.JSON(400, gin.H{"error": err.Error()})
         return
     }
 
+	initializers.DB.Model(*&user).UpdateColumns(user)
 	c.JSON(200, gin.H{
 		"message": "usuário atualizado",
 	})
