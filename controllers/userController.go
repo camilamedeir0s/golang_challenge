@@ -10,7 +10,7 @@ import (
 func UsersCreate(c *gin.Context) {
 	length := c.Request.ContentLength
     if length == 0 {
-        c.JSON(404, gin.H{"error": "Request não possui body"})
+        c.JSON(400, gin.H{"error": "Request não possui body"})
         return
     }
 
@@ -37,7 +37,7 @@ func UsersCreate(c *gin.Context) {
 func UsersArrayCreate(c *gin.Context) {
 	length := c.Request.ContentLength
     if length == 0 {
-        c.JSON(404, gin.H{"error": "Request não possui body"})
+        c.JSON(400, gin.H{"error": "Request não possui body"})
         return
     }
 	
